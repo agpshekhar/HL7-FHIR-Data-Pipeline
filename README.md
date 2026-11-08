@@ -81,6 +81,7 @@ _Coming in Milestone 1._
 - **Fix what's provable, flag what isn't.** Local codes and unit spellings are mapped through vocabularies; a missing unit or an unmapped code is flagged and counted, never guessed.
 - **Ground truth.** Synthea is the source of truth, so a round-trip test checks every result end to end: same value, unit and moment of collection, nothing lost, nothing invented.
 - **Messy feeds on purpose.** The mock LIS injects realistic problems (local codes, unit variants, missing units, censored values, hemolysis, duplicates, corrections, out-of-order arrivals) and logs each one as an answer key.
+- **Consistency checks.** Every result is checked for collection before resulting, abnormal flag versus reference range, a valid UCUM unit, and a present patient and specimen.
 - **Replay determinism.** A shuffled, duplicated feed with early corrections must produce exactly the same OMOP output as a clean one.
 
 ## Design decisions and trade-offs
@@ -102,7 +103,7 @@ Planned decision records:
 
 **Milestone 1: walking skeleton**
 
-- [ ] Guardrails, repo setup and vocabulary request
+- [ ] Repo setup, labpipe CLI stub and vocabulary request
 - [ ] Docker stack, migrations and CI
 - [ ] Seeded Synthea sample and vocabulary subset
 - [ ] Mock LIS writing ORU^R01 messages
