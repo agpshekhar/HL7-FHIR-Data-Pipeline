@@ -17,6 +17,3 @@ data/*
 
 # Generated run outputs
 out/
-
-# Private guardrail files: the denylist and personal email never get committed
-guardrails/
