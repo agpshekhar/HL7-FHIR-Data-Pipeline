@@ -35,7 +35,7 @@ def test_unknown_command_is_rejected(capsys):
 
 @pytest.mark.parametrize(
     "argv",
-    [["migrate"], ["vocab", "load"], ["run", "--all"]],
+    [["vocab", "load"], ["run", "--all"]],
 )
 def test_jobs_not_built_yet_exit_cleanly(argv, capsys):
     assert main(argv) == 0
