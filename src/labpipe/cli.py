@@ -4,10 +4,23 @@ import argparse
 import sys
 
 from labpipe import __version__
+from labpipe.common.db import connect
+from labpipe.common.migrate import apply_migrations, migrations_dir
 
 
 def _cmd_version(args: argparse.Namespace) -> int:
     print(f"labpipe {__version__}")
+    return 0
+
+
+def _cmd_migrate(args: argparse.Namespace) -> int:
+    with connect() as conn:
+        applied = apply_migrations(conn, migrations_dir())
+    if applied:
+        for name in applied:
+            print(f"applied {name}")
+    else:
+        print("no migrations to apply")
     return 0
 
 
@@ -40,7 +53,7 @@ def build_parser() -> argparse.ArgumentParser:
     migrate_parser = subparsers.add_parser(
         "migrate", help="Apply database migrations (safe to rerun)."
     )
-    migrate_parser.set_defaults(func=_not_built_yet(2))
+    migrate_parser.set_defaults(func=_cmd_migrate)
 
     vocab_parser = subparsers.add_parser("vocab", help="Load OMOP vocabularies.")
     vocab_parser.add_argument("action", choices=["load"], help="What to do.")
