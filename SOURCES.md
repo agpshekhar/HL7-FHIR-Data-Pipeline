@@ -7,8 +7,10 @@ The standards, data and vocabularies this pipeline depends on, where each comes 
 - **What:** Open-source synthetic patient generator. Supplies the patients, encounters and basic metabolic panel (BMP) lab results that the mock LIS turns into HL7 v2 messages.
 - **Where:** https://synthetichealth.github.io/synthea/ (code at https://github.com/synthetichealth/synthea)
 - **License:** Apache License 2.0.
-- **Use here:** A small seeded sample is committed under `data/sample/` so every run starts from the same input. It is also the ground truth for the round-trip test. All data is synthetic; no real patient data is used.
-- **Version / seed:** _To be recorded when the sample is generated._
+- **Use here:** `scripts/extract_bmp_sample.py` extracts the basic metabolic panels (the eight Blood analytes Synthea reports under LOINC 51990-0) into `data/sample/`: 35 patients, 1,033 panels, 8,264 results. The sample is committed so every run starts from the same input, and it is the ground truth for the round-trip test. All data is synthetic; no real patient data is used.
+- **Version / seed:** Synthea commit `d9d07a6`, Java 21, run 2026-10-16:
+  `java -jar synthea-with-dependencies.jar -s 42 -p 100 --exporter.csv.export=true Kansas`
+  (reference date 2026-10-16, clinician seed 1792183437730, 10 years of history; 112 patients including deceased). Synthea also reads the time of day, so a rerun with the same seeds does not reproduce these files byte for byte. The committed extract, not the command, is the fixed input.
 
 ## OMOP Common Data Model 5.4
 
@@ -26,8 +28,8 @@ The standards, data and vocabularies this pipeline depends on, where each comes 
   - **LOINC:** Regenstrief Institute LOINC license (https://loinc.org/license/).
   - **UCUM:** Regenstrief Institute UCUM terms of use (https://ucum.org/license).
   - **SNOMED CT:** SNOMED International terms (https://www.snomed.org/get-snomed). Athena shows the license status of each vocabulary at download time; record any terms accepted there.
-- **Use here:** The full bundle is kept locally in `data/vocab/` and is never committed (see `.gitignore`). Only a small subset needed by the tests may be committed, where the terms allow it.
-- **Download date / vocabulary version:** _To be recorded when the bundle is downloaded._
+- **Use here:** The full bundle is kept locally in `data/vocab/` and is never committed (see `.gitignore`). `scripts/build_vocab_subset.py` cuts the minimal LOINC/UCUM subset the pipeline needs into `db/vocab_subset/`, which is committed. SNOMED CT is kept out of the subset. Attribution notices are in `NOTICE.md`.
+- **Vocabulary versions:** LOINC 2.82, UCUM 1.8.2, OMOP Standardized Vocabularies v5.0 29-AUG-26 (from the bundle's `VOCABULARY.csv`). Bundle unpacked 2026-11-09.
 
 ## HL7 Version 2.5.1
 
