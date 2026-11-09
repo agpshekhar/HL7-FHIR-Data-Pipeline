@@ -1,0 +1,3 @@
+patient_id,collected_at,loinc,value,unit
+p1,2024-01-01T08:00:00Z,2339-0,98.1,mg/dL
+p1,2024-01-01T08:00:00Z,9999-9,140.2,mmol/L
