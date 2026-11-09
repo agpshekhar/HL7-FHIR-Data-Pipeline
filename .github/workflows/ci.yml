@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    name: Lint and test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: labpipe
+          POSTGRES_PASSWORD: labpipe
+          POSTGRES_DB: labpipe
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U labpipe"
+          --health-interval 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://labpipe:labpipe@localhost:5432/labpipe
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
+
+  compose:
+    name: Compose stack runs twice
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: cp .env.example .env
+      - run: docker compose build
+      # `run pipeline` starts db, migrate and vocab first, in order, and fails if any job fails.
+      # db keeps running between the two runs, so the second run proves every job is safe to rerun.
+      - name: First run
+        run: docker compose run --rm pipeline
+      - name: Second run
+        run: docker compose run --rm pipeline
+      - name: Show logs
+        if: always()
+        run: docker compose logs --no-color
+      - name: Tear down
+        if: always()
+        run: docker compose down --volumes

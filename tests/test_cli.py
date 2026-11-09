@@ -31,3 +31,12 @@ def test_unknown_command_is_rejected(capsys):
         main(["not-a-command"])
     assert exc_info.value.code == 2
     assert "invalid choice" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [["migrate"], ["vocab", "load"], ["run", "--all"]],
+)
+def test_jobs_not_built_yet_exit_cleanly(argv, capsys):
+    assert main(argv) == 0
+    assert "not built yet" in capsys.readouterr().out

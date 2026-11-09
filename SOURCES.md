@@ -15,7 +15,8 @@ The standards, data and vocabularies this pipeline depends on, where each comes 
 - **What:** The OHDSI Observational Medical Outcomes Partnership data model, the target schema for Hop 2 (`person`, `visit_occurrence`, `measurement`, `observation`, vocabulary tables and so on).
 - **Where:** https://ohdsi.github.io/CommonDataModel/cdm54.html (DDL at https://github.com/OHDSI/CommonDataModel)
 - **License:** Apache License 2.0.
-- **Use here:** The Postgres DDL for CDM 5.4 defines the tables Hop 2 loads.
+- **Use here:** The Postgres DDL for CDM 5.4 defines the tables Hop 2 loads. `scripts/fetch_omop_ddl.py` downloads it and writes it to `db/migrations/01*.sql` in the `cdm` schema, with every foreign key made deferrable and the missing primary key on `vocabulary` added.
+- **Version:** CommonDataModel tag `v5.4.3`.
 
 ## OHDSI Athena vocabularies (LOINC, UCUM, SNOMED CT)
 
