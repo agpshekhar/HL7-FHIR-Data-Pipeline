@@ -4,7 +4,7 @@
 
 A lab result starts life as an HL7 v2 message, is shared through FHIR APIs, and is analyzed in OMOP research databases. Each hop crosses a different standard, and each is a place where data quietly breaks: duplicate messages, corrections that arrive out of order, codes that never get mapped. This pipeline carries synthetic basic metabolic panel (BMP) results across all three standards, through an interface engine, and proves with automated tests that every result arrives intact.
 
-> **Status:** Phase 2 of 16, in progress. See the [roadmap](#roadmap).
+> **Status:** Phase 3 of 16, in progress. See the [roadmap](#roadmap).
 >
 > **All data is synthetic,** generated with [Synthea](https://synthetichealth.github.io/synthea/). No real patient data is used anywhere in this project.
 
@@ -111,7 +111,7 @@ The work runs in 16 phases, each closed when its done-when check passes. Gate re
 **Milestone 1: walking skeleton (Phases 1–6)**
 
 - [x] Phase 1: Athena vocabulary request, `labpipe` CLI skeleton, LICENSE and SOURCES.md, pre-commit with ruff and gitleaks
-- [ ] Phase 2: app image, Postgres and migrations (staging, error queue, crosswalk, OMOP 5.4, deferrable FKs), CI runs Compose
+- [x] Phase 2: app image, Postgres and migrations (staging, error queue, crosswalk, OMOP 5.4, deferrable FKs), CI runs Compose
 - [ ] Phase 3: seeded Synthea BMP extract and vocabulary subset
 - [ ] Phase 4: mock LIS writing ORU^R01 messages into staging
 - [ ] Phase 5: Hop 1, HL7 v2 to FHIR R4 with UUIDv5 IDs

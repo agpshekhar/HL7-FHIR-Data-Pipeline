@@ -28,7 +28,7 @@ The standards, data and vocabularies this pipeline depends on, where each comes 
   - **LOINC:** Regenstrief Institute LOINC license (https://loinc.org/license/).
   - **UCUM:** Regenstrief Institute UCUM terms of use (https://ucum.org/license).
   - **SNOMED CT:** SNOMED International terms (https://www.snomed.org/get-snomed). Athena shows the license status of each vocabulary at download time; record any terms accepted there.
-- **Use here:** The full bundle is kept locally in `data/vocab/` and is never committed (see `.gitignore`). `scripts/build_vocab_subset.py` cuts the minimal LOINC/UCUM subset the pipeline needs into `db/vocab_subset/`, which is committed. SNOMED CT is kept out of the subset. Attribution notices are in `NOTICE.md`.
+- **Use here:** The full bundle is kept locally in `data/vocab/` and is never committed (see `.gitignore`). `scripts/build_vocab_subset.py` (being built in Phase 3) cuts the minimal LOINC/UCUM subset the pipeline needs into `db/vocab_subset/`, which is committed. SNOMED CT is kept out of the subset. Attribution notices are in `NOTICE.md`.
 - **Vocabulary versions:** LOINC 2.82, UCUM 1.8.2, OMOP Standardized Vocabularies v5.0 29-AUG-26 (from the bundle's `VOCABULARY.csv`). Bundle unpacked 2026-11-09.
 
 ## HL7 Version 2.5.1
