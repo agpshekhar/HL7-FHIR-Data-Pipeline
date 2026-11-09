@@ -4,7 +4,7 @@
 
 A lab result starts life as an HL7 v2 message, is shared through FHIR APIs, and is analyzed in OMOP research databases. Each hop crosses a different standard, and each is a place where data quietly breaks: duplicate messages, corrections that arrive out of order, codes that never get mapped. This pipeline carries synthetic basic metabolic panel (BMP) results across all three standards, through an interface engine, and proves with automated tests that every result arrives intact.
 
-> **Status:** Phase 1 of 16, in progress. See the [roadmap](#roadmap).
+> **Status:** Phase 2 of 16, in progress. See the [roadmap](#roadmap).
 >
 > **All data is synthetic,** generated with [Synthea](https://synthetichealth.github.io/synthea/). No real patient data is used anywhere in this project.
 
@@ -30,22 +30,23 @@ Seeded Synthea BMP sample
 
 ## Quickstart
 
-<!-- TODO: Replace with the one-command run once the Docker stack is in (Phase 2). -->
-
-Target:
+You need Docker (Docker Desktop on a Mac) and Git.
 
 ```bash
 git clone https://github.com/agpshekhar/HL7-FHIR-Data-Pipeline.git
 cd HL7-FHIR-Data-Pipeline
-docker compose up --build
+cp .env.example .env
+docker compose up --build -d
+docker compose ps -a     # db is healthy; migrate, vocab and pipeline exited with code 0
 ```
 
-For now:
+Compose starts Postgres, waits for it to be healthy, then runs each job in order: `migrate` (creates the staging and OMOP tables), `vocab` (loads vocabularies) and `pipeline` (runs the hops). Every job is safe to rerun. A job that is not built yet prints a note and exits cleanly; each phase replaces one.
+
+To work on the code outside Docker:
 
 ```bash
-git clone https://github.com/agpshekhar/HL7-FHIR-Data-Pipeline.git
-cd HL7-FHIR-Data-Pipeline
 uv sync
+uv run pytest -q
 ```
 
 A minimal LOINC/UCUM vocabulary subset will ship with the repo, so the default stack runs on any clone. A full OHDSI Athena bundle can be mounted into `data/vocab/` (gitignored) if you want it.
@@ -109,7 +110,7 @@ The work runs in 16 phases, each closed when its done-when check passes. Gate re
 
 **Milestone 1: walking skeleton (Phases 1–6)**
 
-- [ ] Phase 1: Athena vocabulary request, `labpipe` CLI skeleton, LICENSE and SOURCES.md, pre-commit with ruff and gitleaks
+- [x] Phase 1: Athena vocabulary request, `labpipe` CLI skeleton, LICENSE and SOURCES.md, pre-commit with ruff and gitleaks
 - [ ] Phase 2: app image, Postgres and migrations (staging, error queue, crosswalk, OMOP 5.4, deferrable FKs), CI runs Compose
 - [ ] Phase 3: seeded Synthea BMP extract and vocabulary subset
 - [ ] Phase 4: mock LIS writing ORU^R01 messages into staging
