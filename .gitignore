@@ -4,9 +4,16 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 .ruff_cache/
-data/
 tools/
 *.duckdb
 *.duckdb.wal
 .DS_Store
 .env
+
+# Data: the seeded Synthea sample is committed; everything else stays local
+# (including the full Athena vocabulary bundle in data/vocab/)
+data/*
+!data/sample/
+
+# Generated run outputs
+out/
