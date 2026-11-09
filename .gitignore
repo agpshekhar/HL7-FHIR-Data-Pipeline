@@ -4,9 +4,10 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 .ruff_cache/
+*.egg-info/
+build/
+dist/
 tools/
-*.duckdb
-*.duckdb.wal
 .DS_Store
 .env
 
