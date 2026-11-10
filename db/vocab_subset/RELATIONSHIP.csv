@@ -1,0 +1,3 @@
+relationship_id	relationship_name	is_hierarchical	defines_ancestry	reverse_relationship_id	relationship_concept_id
+Mapped from	Standard to Non-standard map (OMOP)	0	0	Maps to	44818976
+Maps to	Non-standard to Standard map (OMOP)	0	0	Mapped from	44818977
