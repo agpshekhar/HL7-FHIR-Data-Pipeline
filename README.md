@@ -1,4 +1,4 @@
-# HL7-FHIR-Data-Pipeline
+# hl7-fhir-omop-pipeline
 
 **An interoperability bridge from hospital lab messaging to research-ready data.**
 
@@ -33,8 +33,8 @@ Seeded Synthea BMP sample
 You need Docker (Docker Desktop on a Mac) and Git.
 
 ```bash
-git clone https://github.com/agpshekhar/HL7-FHIR-Data-Pipeline.git
-cd HL7-FHIR-Data-Pipeline
+git clone https://github.com/agpshekhar/hl7-fhir-omop-pipeline.git
+cd hl7-fhir-omop-pipeline
 cp .env.example .env
 docker compose up --build -d
 docker compose ps -a     # db is healthy; migrate, vocab and pipeline exited with code 0

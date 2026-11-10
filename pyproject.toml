@@ -1,5 +1,5 @@
 [project]
-name = "hl7-fhir-data-pipeline"
+name = "hl7-fhir-omop-pipeline"
 version = "0.1.0"
 description = "Synthetic HL7 v2 lab results carried through FHIR R4 into OMOP CDM 5.4."
 readme = "README.md"
