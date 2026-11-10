@@ -2,10 +2,12 @@
 
 import argparse
 import sys
+from pathlib import Path
 
 from labpipe import __version__
 from labpipe.common.db import connect
 from labpipe.common.migrate import apply_migrations, migrations_dir
+from labpipe.common.vocab import load_vocabulary, missing_files, vocab_dir
 
 
 def _cmd_version(args: argparse.Namespace) -> int:
@@ -21,6 +23,20 @@ def _cmd_migrate(args: argparse.Namespace) -> int:
             print(f"applied {name}")
     else:
         print("no migrations to apply")
+    return 0
+
+
+def _cmd_vocab_load(args: argparse.Namespace) -> int:
+    directory = args.dir or vocab_dir()
+    missing = missing_files(directory)
+    if missing:
+        print(f"labpipe vocab load: missing in {directory}: {', '.join(missing)}", file=sys.stderr)
+        return 1
+    with connect() as conn:
+        counts = load_vocabulary(conn, directory)
+    print(f"loaded vocabulary from {directory}")
+    for table, count in counts.items():
+        print(f"  cdm.{table}: {count} rows")
     return 0
 
 
@@ -57,7 +73,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     vocab_parser = subparsers.add_parser("vocab", help="Load OMOP vocabularies.")
     vocab_parser.add_argument("action", choices=["load"], help="What to do.")
-    vocab_parser.set_defaults(func=_not_built_yet(3))
+    vocab_parser.add_argument("--dir", type=Path, help="Directory containing the vocabulary files.")
+    vocab_parser.set_defaults(func=_cmd_vocab_load)
 
     run_parser = subparsers.add_parser("run", help="Run the pipeline end to end.")
     run_parser.add_argument("--all", action="store_true", help="Run every stage in order.")

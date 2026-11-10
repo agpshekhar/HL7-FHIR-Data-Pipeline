@@ -1,0 +1,41 @@
+concept_id	concept_name	domain_id	vocabulary_id	concept_class_id	standard_concept	concept_code	valid_start_date	valid_end_date	invalid_reason
+0	No matching concept	Metadata	None	Undefined		No matching concept	19700101	20991231	
+2	Gender	Metadata	Domain	Domain		OMOP generated	19700101	20991231	
+7	Metadata	Metadata	Domain	Domain		OMOP generated	19700101	20991231	
+16	Unit	Metadata	Domain	Domain		OMOP generated	19700101	20991231	
+21	Measurement	Metadata	Domain	Domain		OMOP generated	19700101	20991231	
+58	Type Concept	Metadata	Domain	Domain		OMOP generated	19700101	20991231	
+8507	MALE	Gender	Gender	Gender	S	M	19700101	20991231	
+8532	FEMALE	Gender	Gender	Gender	S	F	19700101	20991231	
+8753	millimole per liter	Unit	UCUM	Unit	S	mmol/L	19700101	20991231	
+8840	milligram per deciliter	Unit	UCUM	Unit	S	mg/dL	19700101	20991231	
+32808	OMOP Type Concept	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+32817	EHR	Type Concept	Type Concept	Type Concept	S	OMOP4976890	20200820	20991231	
+32856	Lab	Type Concept	Type Concept	Type Concept	S	OMOP4976929	20200820	20991231	
+581453	Type Concept	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+3004501	Glucose [Mass/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2345-7	19700101	20991231	
+3006906	Calcium [Mass/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	17861-6	19980709	20991231	
+3013682	Urea nitrogen [Mass/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	3094-0	19700101	20991231	
+3014576	Chloride [Moles/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2075-0	19700101	20991231	
+3015632	Carbon dioxide, total [Moles/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2028-9	19700101	20991231	
+3016723	Creatinine [Mass/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2160-0	19700101	20991231	
+3019550	Sodium [Moles/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2951-2	19700101	20991231	
+3023103	Potassium [Moles/volume] in Serum or Plasma	Measurement	LOINC	Lab Test	S	2823-3	19700101	20991231	
+44818976	Mapping relationship from Standard Concept (OMOP)	Metadata	Relationship	Relationship		OMOP generated	19700101	20991231	
+44818977	Mapping relationship to Standard Concept (OMOP)	Metadata	Relationship	Relationship		OMOP generated	19700101	20991231	
+44819025	Domain	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819044	Undefined	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819072	Unit	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819086	Gender	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819096	OMOP Standardized Vocabularies	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819102	Logical Observation Identifiers Names and Codes (Regenstrief Institute)	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819107	Unified Code for Units of Measure (Regenstrief Institute)	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819108	OMOP Gender	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819147	OMOP Domain	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819232	OMOP Vocabulary	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819233	OMOP Concept Class	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819235	OMOP Relationship	Metadata	Vocabulary	Vocabulary		OMOP generated	19700101	20991231	
+44819247	OMOP Concept Class	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819274	OMOP Relationship	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+44819279	OMOP Vocabulary	Metadata	Concept Class	Concept Class		OMOP generated	19700101	20991231	
+45754678	Laboratory Class	Metadata	Concept Class	Concept Class		1	19700101	20991231	
