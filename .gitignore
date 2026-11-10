@@ -1,20 +1,49 @@
+# --- Python ------------------------------------------------------------------
 .venv/
 __pycache__/
 *.py[cod]
-.ipynb_checkpoints/
-.pytest_cache/
-.ruff_cache/
 *.egg-info/
 build/
 dist/
-tools/
-.DS_Store
-.env
 
-# Data: the seeded Synthea sample is committed; everything else stays local
-# (including the full Athena vocabulary bundle in data/vocab/)
+# Tool caches (pytest, ruff, mypy from Phase 14, coverage)
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter autosaves
+.ipynb_checkpoints/
+
+# --- Secrets -------------------------------------------------------------------
+# Real settings live in .env; only the template is committed.
+.env
+.env.*
+!.env.example
+# Streamlit dashboard secrets (Phase 13)
+.streamlit/secrets.toml
+
+# --- Editors and operating systems ----------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- Local tools ---------------------------------------------------------------
+# Downloaded binaries such as synthea-with-dependencies.jar (about 200 MB)
+tools/
+*.jar
+
+# --- Data ------------------------------------------------------------------------
+# Only the seeded Synthea extract in data/sample/ is committed. Everything else
+# under data/ stays on your machine: the raw Synthea export (data/synthea/) and
+# the full Athena vocabulary bundle (data/vocab/, several GB, licensed terms).
 data/*
 !data/sample/
 
-# Generated run outputs
+# --- Generated output ----------------------------------------------------------
 out/
+*.log
