@@ -37,3 +37,10 @@ The standards, data and vocabularies this pipeline depends on, where each comes 
 - **Where:** https://www.hl7.org/implement/standards/product_brief.cfm?product_id=144
 - **Terms:** HL7 International standards; specifications are free to download after registering with HL7.
 - **Use here:** The mock LIS builds and sends v2.5.1 messages; the BridgeLink channel validates and acknowledges them; Hop 1 parses them with hl7apy.
+
+## Reference ranges (MedlinePlus)
+
+- **What:** Adult reference ranges for the eight BMP analytes. The mock LIS writes them into OBX-7 and uses them to compute the abnormal flag in OBX-8 (L, H or N).
+- **Where:** MedlinePlus Medical Encyclopedia, "Basic metabolic panel", U.S. National Library of Medicine: https://medlineplus.gov/ency/article/003462.htm (review date 5/19/2025, read 2026-11-10).
+- **Terms:** MedlinePlus encyclopedia text is licensed from A.D.A.M.; only the numeric ranges are used here, cited, not the text.
+- **Use here:** `src/labpipe/lis/reference_ranges.py`. Sodium 136–144 and potassium 3.7–5.2 are given in mEq/L, which equals mmol/L for these ions. The page notes that ranges vary slightly between laboratories; one adult range per analyte is used, with no age or sex split.

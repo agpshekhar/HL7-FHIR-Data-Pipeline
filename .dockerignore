@@ -4,7 +4,9 @@
 **/__pycache__/
 .pytest_cache/
 .ruff_cache/
-data/
+# Keep local Synthea runs and Athena downloads out of the image; only the committed sample goes in.
+data/*
+!data/sample/
 notebooks/
 out/
 tools/

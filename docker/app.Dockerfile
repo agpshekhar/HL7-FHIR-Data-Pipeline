@@ -15,9 +15,11 @@ WORKDIR /app
 COPY pyproject.toml uv.lock README.md LICENSE ./
 RUN uv sync --frozen --no-dev --no-install-project
 
-# Then the project itself and the SQL migrations it applies.
+# Then the project itself, the SQL migrations and vocabulary it loads, and the BMP sample
+# the mock LIS reads.
 COPY src ./src
 COPY db ./db
+COPY data/sample ./data/sample
 RUN uv sync --frozen --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
