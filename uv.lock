@@ -80,7 +80,7 @@ wheels = [
 ]
 
 [[package]]
-name = "hl7-fhir-data-pipeline"
+name = "hl7-fhir-omop-pipeline"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
