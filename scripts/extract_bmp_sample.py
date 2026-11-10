@@ -8,8 +8,12 @@ will build in Phase 4:
 - bmp_panels.csv   (OBR) one row per panel: patient, collection time, encounter
 - bmp_results.csv  (OBX) one row per analyte, eight per panel
 
-A panel is the eight LOINC codes Synthea reports under "Basic metabolic panel -
-Blood" (LOINC 51990-0), sharing one patient, encounter and collection time.
+A panel is the eight Serum/Plasma analytes Synthea reports under "Basic metabolic
+2000 panel - Serum or Plasma" (LOINC 24321-2), sharing one patient, encounter and
+collection time. Synthea also attaches a calculated eGFR (33914-3) to that panel;
+it is not one of the eight measured analytes, so it is left out. A comprehensive
+metabolic panel (CMP, 24323-8) reports the same eight codes plus liver tests; those
+draws are CMPs, not BMPs, so they are left out too.
 Values are copied as text, exactly as Synthea wrote them, so the round-trip test
 can compare them character for character.
 
@@ -26,16 +30,28 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# LOINC 51990-0 "Basic metabolic panel - Blood": the members Synthea attaches to it.
+# LOINC 24321-2 "Basic metabolic 2000 panel - Serum or Plasma": its eight measured analytes.
 BMP_CODES = {
-    "2339-0": "Glucose [Mass/volume] in Blood",
-    "6299-2": "Urea nitrogen [Mass/volume] in Blood",
-    "38483-4": "Creatinine [Mass/volume] in Blood",
-    "49765-1": "Calcium [Mass/volume] in Blood",
-    "2947-0": "Sodium [Moles/volume] in Blood",
-    "6298-4": "Potassium [Moles/volume] in Blood",
-    "2069-3": "Chloride [Moles/volume] in Blood",
-    "20565-8": "Carbon dioxide, total [Moles/volume] in Blood",
+    "2345-7": "Glucose [Mass/volume] in Serum or Plasma",
+    "3094-0": "Urea nitrogen [Mass/volume] in Serum or Plasma",
+    "2160-0": "Creatinine [Mass/volume] in Serum or Plasma",
+    "17861-6": "Calcium [Mass/volume] in Serum or Plasma",
+    "2951-2": "Sodium [Moles/volume] in Serum or Plasma",
+    "2823-3": "Potassium [Moles/volume] in Serum or Plasma",
+    "2075-0": "Chloride [Moles/volume] in Serum or Plasma",
+    "2028-9": "Carbon dioxide, total [Moles/volume] in Serum or Plasma",
+}
+
+# Analytes only a CMP (24323-8) adds on top of the BMP. Seeing any of them at the same
+# patient, encounter and time means the draw was a CMP.
+CMP_ONLY_CODES = {
+    "2885-2",  # Protein
+    "1751-7",  # Albumin
+    "1975-2",  # Bilirubin, total
+    "6768-6",  # Alkaline phosphatase
+    "1742-6",  # ALT
+    "1920-8",  # AST
+    "10834-0",  # Globulin
 }
 
 PANEL_COLUMNS = ["patient_id", "collected_at", "encounter_id"]
@@ -48,22 +64,26 @@ def read_panels(observations: Path) -> dict[tuple, dict[str, set]]:
     panels: dict[tuple, dict[str, set]] = defaultdict(lambda: defaultdict(set))
     with observations.open(newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            if row["CODE"] in BMP_CODES:
+            if row["CODE"] in BMP_CODES or row["CODE"] in CMP_ONLY_CODES:
                 key = (row["PATIENT"], row["ENCOUNTER"], row["DATE"])
                 panels[key][row["CODE"]].add((row["VALUE"], row["UNITS"]))
     return panels
 
 
-def keep_complete(panels: dict[tuple, dict[str, set]]) -> tuple[list, list, list]:
-    """Return (panel rows, result rows, rejected panel keys).
+def keep_complete(panels: dict[tuple, dict[str, set]]) -> tuple[list, list, list, int]:
+    """Return (panel rows, result rows, rejected panel keys, number of CMPs skipped).
 
+    A draw that includes any CMP-only analyte is a CMP and is skipped.
     A panel is kept only if it has all eight codes and exactly one value for each.
     Two different values for the same code at the same moment means two draws
     were recorded on top of each other; we cannot tell them apart, so the whole
     panel is left out and reported rather than guessed at.
     """
-    panel_rows, result_rows, rejected = [], [], []
+    panel_rows, result_rows, rejected, cmps = [], [], [], 0
     for (patient, encounter, collected_at), codes in panels.items():
+        if set(codes) & CMP_ONLY_CODES:
+            cmps += bool(set(codes) & BMP_CODES.keys())  # liver-only draws aren't counted
+            continue
         if set(codes) != set(BMP_CODES) or any(len(v) != 1 for v in codes.values()):
             rejected.append((patient, collected_at))
             continue
@@ -71,7 +91,7 @@ def keep_complete(panels: dict[tuple, dict[str, set]]) -> tuple[list, list, list
         for loinc, values in codes.items():
             (value, unit) = next(iter(values))
             result_rows.append([patient, collected_at, loinc, value, unit])
-    return sorted(panel_rows), sorted(result_rows), sorted(rejected)
+    return sorted(panel_rows), sorted(result_rows), sorted(rejected), cmps
 
 
 def read_patients(patients_csv: Path, wanted: set[str]) -> list[list[str]]:
@@ -106,7 +126,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=ROOT / "data/sample")
     args = parser.parse_args(argv)
 
-    panels, results, rejected = keep_complete(read_panels(args.synthea / "observations.csv"))
+    observations = args.synthea / "observations.csv"
+    panels, results, rejected, cmps = keep_complete(read_panels(observations))
     patients = read_patients(args.synthea / "patients.csv", {p[0] for p in panels})
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -115,6 +136,7 @@ def main(argv: list[str] | None = None) -> int:
     write_csv(args.out / "bmp_results.csv", RESULT_COLUMNS, results)
 
     print(f"{len(patients)} patients, {len(panels)} panels, {len(results)} results")
+    print(f"left out {cmps} comprehensive metabolic panels (CMP), which are not BMPs")
     for patient, collected_at in rejected:
         print(f"left out (incomplete or conflicting): patient={patient} time={collected_at}")
     return 0
